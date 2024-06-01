@@ -1,9 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
 
-export const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState("");
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
 
@@ -11,19 +11,7 @@ export const ForgotPasswordPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:3000/auth/forgot-password", {
-        email,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "ok") {
-          navigate("/signin");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //   .post("http://localhost:3000/auth/forgot-password", {
   };
 
   return (
@@ -73,4 +61,4 @@ export const ForgotPasswordPage = () => {
       </div>
     </>
   );
-};
+}

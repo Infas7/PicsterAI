@@ -1,44 +1,32 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-export const TextToImagePage = () => {
+export default function TextToImagePage() {
   const navigate = useNavigate();
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState('');
   const [imageData, setImageData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // axios.defaults.withCredentials = true;
   useEffect(() => {
-    // const verify = async () => {
-    //   try {
     //     const res = await axios.get("http://localhost:3000/auth/verify");
-    //     if (res.data.status === "ok") {
-    //     } else {
-    //       navigate("/signin");
-    //     }
-    //   } catch (error) {
-    //     console.log(error.message);
-    //   }
-    // };
-    // verify();
   }, []);
 
   const handleClick = async () => {
     try {
       setImageData(null);
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/image/generate", {
+      const res = await axios.post('http://localhost:3000/image/generate', {
         prompt,
       });
-      if (res.data.status === "ok") {
+      if (res.data.status === 'ok') {
         setImageData(res.data.api_data.image);
       } else {
       }
     } catch (error) {
       console.log(error.message);
     } finally {
-      setPrompt("");
+      setPrompt('');
       setLoading(false);
     }
   };
@@ -46,9 +34,9 @@ export const TextToImagePage = () => {
   const handleDownload = () => {
     if (imageData) {
       const linkSource = `data:image/png;base64,${imageData}`;
-      const downloadLink = document.createElement("a");
+      const downloadLink = document.createElement('a');
       downloadLink.href = linkSource;
-      downloadLink.download = "generated-image.png";
+      downloadLink.download = 'generated-image.png';
       downloadLink.click();
     }
   };
@@ -130,4 +118,4 @@ export const TextToImagePage = () => {
       </div>
     </div>
   );
-};
+}

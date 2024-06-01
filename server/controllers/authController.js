@@ -5,7 +5,7 @@ import nodemailer from 'nodemailer';
 import { User } from '../models/User.js';
 
 //register
-export const signup = async (req, res) => {
+export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
 };
 
 //login
-export const signin = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   //check if the user already exist

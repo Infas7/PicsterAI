@@ -1,30 +1,15 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 
-export const PasswordResetPage = () => {
-  const [password, setPassword] = useState("");
+export default function PasswordResetPage() {
+  const [password, setPassword] = useState('');
 
   const { token } = useParams();
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true;
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    axios
-      .post(`http://localhost:3000/auth/reset-password/${token}`, {
-        password,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "ok") {
-          navigate("/signin");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //   .post(`http://localhost:3000/auth/reset-password/${token}`, {
   };
 
   return (
@@ -65,4 +50,4 @@ export const PasswordResetPage = () => {
       </div>
     </>
   );
-};
+}
