@@ -1,26 +1,37 @@
-import { useState } from 'react';
-import { useAuthContext } from './useAuthContext';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./useAuthContext";
 
 export const useLogin = () => {
   const [isLoading, setIsloading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const { dispatch } = useAuthContext();
+  const navigate = useNavigate();
 
-  const login = async (name, email, password) => {
+  const login = async (email, password) => {
     setIsloading(true);
-    setError('');
-    const response = await fetch('http://localhost:3000/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ name, email, password }),
+    setError(null);
+
+    const response = await fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
+    const jsonData = await response.json();
+
     if (!response.ok) {
-      setError();
+      setIsloading(false);
+      setError(jsonData.error);
     }
 
     if (response.ok) {
-      const data = await response.json();
+      setIsloading(false);
+      localStorage.setItem("user", JSON.stringify(jsonData));
+      dispatch({ type: "LOGIN", payload: jsonData });
+      navigate("/dashboard");
     }
   };
 
-  return isLoading, error, login;
+  return { isLoading, error, setError, login };
 };

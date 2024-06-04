@@ -1,13 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const navigate = useNavigate();
 
-  axios.defaults.withCredentials = true;
   const handleSubmit = (e) => {
     e.preventDefault();
 

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+// import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export default function ImageToImagePage() {
   const navigate = useNavigate();
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageFromApi, setImageData] = useState(null);
@@ -42,37 +42,37 @@ export default function ImageToImagePage() {
       setLoading(true);
 
       const formData = new FormData();
-      formData.append('prompt', prompt);
-      formData.append('image', image);
+      formData.append("prompt", prompt);
+      formData.append("image", image);
 
       const res = await axios.post(
-        'http://localhost:3000/image/edit',
+        "http://localhost:3000/image/edit",
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      if (res.data.status === 'ok') {
+      if (res.data.status === "ok") {
         setImageData(res.data.api_data.output[0]);
       } else {
       }
     } catch (error) {
       console.log(error.message);
     } finally {
-      setPrompt('');
+      setPrompt("");
       setLoading(false);
     }
   };
 
   const handleDownload = () => {
     if (imageFromApi) {
-      let element = document.createElement('a');
-      let file = new Blob([imageFromApi], { type: 'image/*' });
+      let element = document.createElement("a");
+      let file = new Blob([imageFromApi], { type: "image/*" });
       element.href = URL.createObjectURL(file);
-      element.download = 'edited-image.png';
+      element.download = "edited-image.png";
       element.click();
     }
   };

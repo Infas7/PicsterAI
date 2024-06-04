@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
-import { User } from '../models/User.js';
+import { User } from "../models/User.js";
 
 //register
 export const register = async (req, res) => {
@@ -10,7 +10,7 @@ export const register = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (user) {
-    return res.json({ message: 'user already exists!' });
+    return res.status(400).json({ error: "user already exists!" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,7 +21,7 @@ export const register = async (req, res) => {
   });
 
   await newUser.save();
-  return res.json({ status: 'ok', message: 'user registered successfully!' });
+  return res.status(201).json({ message: "user registered successfully!" });
 };
 
 //login
@@ -31,32 +31,23 @@ export const login = async (req, res) => {
   //check if the user already exist
   const user = await User.findOne({ email });
   if (!user) {
-    return res.json({ status: 'failed', message: 'user record not found' });
+    return res.status(404).json({ error: "The email does not exist" });
   }
   //validate the user password
   const isValidPassword = await bcrypt.compare(password, user?.password);
 
   if (!isValidPassword) {
-    return res.json({
-      status: 'failed',
-      message: 'user password is not valid',
+    return res.status(400).json({
+      error: "user password is not valid",
     });
   }
 
   const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: "1d",
   });
 
-  // res.cookie('token', token, { httpOnly: true, maxAge: 360000 });
-  // return res.json({ status: 'ok', message: 'login successful!' });
-  return res.json({ status: 'ok', token: token });
+  return res.status(200).json({ token: token });
 };
-
-//logout user
-// export const signout = (req, res) => {
-//   res.clearCookie('token');
-//   res.json({ status: 'ok', message: 'logout successful!' });
-// };
 
 //handle forgot password
 export const forgotPassword = async (req, res) => {
@@ -66,15 +57,15 @@ export const forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.json({ status: 'failed', message: 'user not registered' });
+      return res.status(404).json({ error: "user not registered" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '5m',
+      expiresIn: "5m",
     });
 
     let transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_APP_KEY,
@@ -84,17 +75,16 @@ export const forgotPassword = async (req, res) => {
     let mailOptions = {
       from: process.env.GMAIL_FROM_ADDRESS,
       to: email,
-      subject: 'Reset Your Password',
+      subject: "Reset Your Password",
       text: `${process.env.ORIGIN}/reset-password/${token}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error);
-        return res.json({ status: 'failed', message: 'email sending failed!' });
+        return res.status(500).json({ error: "email sending failed!" });
       } else {
-        console.log('Email sent: ' + info.response);
-        return res.json({ status: 'ok', message: 'email sent successfully!' });
+        // console.log("Email sent: " + info.response);
+        return res.status(200).json({ message: "email sent successfully!" });
       }
     });
   } catch (error) {
@@ -112,13 +102,8 @@ export const resetPassword = async (req, res) => {
     const id = decoded.id;
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate({ _id: id }, { password: hashedPassword });
-    return res.json({ status: 'ok', message: 'password reset successfully!' });
+    return res.status(200).json({ message: "password reset successfully!" });
   } catch (error) {
-    return res.json({ status: 'failed', message: 'invalid token!' });
+    return res.status(401).json({ error: "invalid token!" });
   }
 };
-
-//verify if the user logged in or not
-// export const verifyUser = (req, res) => {
-//   return res.json({status: "ok", message: "user is authorized"})
-// }

@@ -1,33 +1,27 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import { useState } from "react";
-import axios from "axios";
+import { useSignUp } from "../../hooks/useSignUp";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { isLoading, error, setError, signup } = useSignUp();
 
-  const navigate = useNavigate();
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!email || !password || !name) {
+      setError("All the fields are required");
+      return;
+    }
 
-    axios
-      .post("http://localhost:3000/auth/signup", {
-        name,
-        email,
-        password,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data.status === "ok") {
-          navigate("/signin");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await signup(name, email, password);
+
+    if (error) {
+      setName("");
+      setEmail("");
+    }
   };
 
   return (
@@ -48,6 +42,11 @@ const SignUpPage = () => {
               <h1 className="text-xl text-center font-semibold leading-tight tracking-tight md:text-2xl text-white">
                 Create New Account
               </h1>
+              {error && (
+                <div className="bg-red-500 text-white border rounded-md border-white font-semibold text-center py-1">
+                  {error}
+                </div>
+              )}
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 <div>
                   <label
@@ -59,6 +58,7 @@ const SignUpPage = () => {
                   <input
                     type="text"
                     onChange={(e) => setName(e.target.value)}
+                    value={name}
                     name="name"
                     id="name"
                     className=" border sm:text-sm rounded-lg   block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-fuchsia-500 focus:border-fuchsia-500"
@@ -76,6 +76,7 @@ const SignUpPage = () => {
                   <input
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                     name="email"
                     id="email"
                     className=" border sm:text-sm rounded-lg   block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-fuchsia-500 focus:border-fuchsia-500"
@@ -93,6 +94,7 @@ const SignUpPage = () => {
                   <input
                     type="password"
                     onChange={(e) => setPassword(e.target.value)}
+                    value={password}
                     name="password"
                     id="password"
                     placeholder="••••••••"
@@ -115,7 +117,8 @@ const SignUpPage = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full font-medium rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800"
+                  disabled={isLoading}
+                  className="w-full font-semibold rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800"
                 >
                   Sign Up
                 </button>
