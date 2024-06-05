@@ -43,7 +43,7 @@ export default function ImageToImagePage() {
     formData.append("prompt", prompt);
     formData.append("image", image);
 
-    const response = await fetch("http://localhost:3000/image/edit", {
+    const response = await fetch(import.meta.env.VITE_API_URL + "image/edit", {
       method: "POST",
       headers: { Authorization: `Bearer ${user.token}` },
       body: formData,

@@ -23,11 +23,14 @@ export default function TextToImagePage() {
       "Content-Type": "application/json",
     };
 
-    const response = await fetch("http://localhost:3000/image/generate", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({ prompt }),
-    });
+    const response = await fetch(
+      import.meta.env.VITE_API_URL + "image/generate",
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ prompt }),
+      }
+    );
 
     const jsonData = await response.json();
 
