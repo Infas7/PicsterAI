@@ -36,5 +36,8 @@ app.use((req, res, next) => {
 });
 
 //routes
+app.use("/", (req, res) => {
+  return "Hello. It's working...";
+});
 app.use("/auth", authRouter);
 app.use("/image", requireAuth, imageRouter);
