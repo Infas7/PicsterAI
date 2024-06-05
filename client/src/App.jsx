@@ -27,12 +27,12 @@ export default function App() {
           <Route
             path="/reset-password/:token"
             element={<PasswordResetPage />}
-          ></Route>
+          />
         </Route>
         <Route element={<PrivateRoutes />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/text-to-image" element={<TextToImagePage />}></Route>
-          <Route path="/image-to-image" element={<ImageToImagePage />}></Route>
+          <Route path="/text-to-image" element={<TextToImagePage />} />
+          <Route path="/image-to-image" element={<ImageToImagePage />} />
         </Route>
       </Route>
     )

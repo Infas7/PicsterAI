@@ -8,6 +8,7 @@ dotenv.config();
 //routes imports
 import { authRouter } from "./routes/auth.js";
 import { imageRouter } from "./routes/image.js";
+import { requireAuth } from "./middlewares/auth.js";
 
 const app = express();
 mongoose
@@ -22,7 +23,6 @@ mongoose
 
 // middlewares
 app.use(express.json());
-// app.use(express.static('./public'));
 app.use(
   cors({
     origin: [process.env.ORIGIN],
@@ -37,4 +37,4 @@ app.use((req, res, next) => {
 
 //routes
 app.use("/auth", authRouter);
-app.use("/image", imageRouter);
+app.use("/image", requireAuth, imageRouter);

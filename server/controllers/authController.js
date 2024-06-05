@@ -42,9 +42,13 @@ export const login = async (req, res) => {
     });
   }
 
-  const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { _id: user._id, name: user.name },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
 
   return res.status(200).json({ token: token });
 };

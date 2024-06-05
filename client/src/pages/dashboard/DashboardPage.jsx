@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import ImgCard from '../../components/ImgCard';
+import ImgCard from "../../components/ImgCard";
 
-import image1 from '../../assets/img1.jpg';
-import image2 from '../../assets/img2.jpg';
+import image1 from "../../assets/img1.jpg";
+import image2 from "../../assets/img2.jpg";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="h-screen flex flex-col bg-slate-100">
-        <h1 className="px-4 text-3xl md:text-4xl font-bold text-center mt-10 bg-gradient-to-r from-fuchsia-900 to-fuchsia-300 bg-clip-text text-transparent">
+        <h1 className="px-4 pt-8 text-3xl md:text-4xl font-bold text-center mt-10 bg-gradient-to-r from-fuchsia-900 to-fuchsia-300 bg-clip-text text-transparent">
           Unleash the power of AI to create images
         </h1>
         <div className="flex items-start pt-12 md:pt-24 pb-10 justify-center flex-grow">

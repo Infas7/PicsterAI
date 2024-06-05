@@ -118,7 +118,7 @@ const SignUpPage = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full font-semibold rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800"
+                  className="w-full flex justify-center items-center font-semibold rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800 disabled:opacity-60"
                 >
                   {isLoading ? (
                     <span>

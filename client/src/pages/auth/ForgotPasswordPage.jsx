@@ -3,13 +3,35 @@ import { useState } from "react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
 
-    //   .post("http://localhost:3000/auth/forgot-password", {
+    setLoading(true);
+    const response = await fetch(`http://localhost:3000/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      setError(json.error);
+      setLoading(false);
+    }
+    if (response.ok) {
+      navigate("/signin");
+    }
   };
 
   return (
@@ -20,6 +42,11 @@ export default function ForgotPasswordPage() {
             <h1 className="text-xl text-center font-semibold leading-tight tracking-tight md:text-2xl text-white">
               Forgot Password
             </h1>
+            {error && (
+              <div className="bg-red-500 text-white border rounded-md border-white font-semibold text-center py-1">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div>
                 <label
@@ -31,6 +58,7 @@ export default function ForgotPasswordPage() {
                 <input
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   name="email"
                   id="email"
                   className=" border sm:text-sm rounded-lg   block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-fuchsia-500 focus:border-fuchsia-500"
@@ -40,9 +68,28 @@ export default function ForgotPasswordPage() {
               </div>
               <button
                 type="submit"
-                className="w-full font-medium rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800"
+                className="w-full flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2.5 text-white text-center bg-fuchsia-600 hover:bg-fuchsia-700 focus:ring-fuchsia-800"
               >
-                Send
+                {loading ? (
+                  <span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-loader-circle animate-spin"
+                    >
+                      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                    </svg>
+                  </span>
+                ) : (
+                  <span>Send</span>
+                )}
               </button>
 
               <div className="flex justify-center items-center">
