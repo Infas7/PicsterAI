@@ -26,9 +26,9 @@ export const useLogin = () => {
     }
 
     if (response.ok) {
-      setIsloading(false);
       localStorage.setItem("user", JSON.stringify(jsonData));
       dispatch({ type: "LOGIN", payload: jsonData });
+      setIsloading(false);
       navigate("/dashboard");
     }
   };

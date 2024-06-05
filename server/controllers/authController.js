@@ -38,7 +38,7 @@ export const login = async (req, res) => {
 
   if (!isValidPassword) {
     return res.status(400).json({
-      error: "user password is not valid",
+      error: "password is not valid",
     });
   }
 
@@ -102,7 +102,7 @@ export const resetPassword = async (req, res) => {
     const id = decoded.id;
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate({ _id: id }, { password: hashedPassword });
-    return res.status(200).json({ message: "password reset successfully!" });
+    return res.status(200).json({ message: "password reset successful" });
   } catch (error) {
     return res.status(401).json({ error: "invalid token!" });
   }
